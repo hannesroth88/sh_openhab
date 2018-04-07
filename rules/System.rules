@@ -1,0 +1,25 @@
+//------------------------------------------------------------------------
+//    Führt ein OpenHab System Reboot durch
+//------------------------------------------------------------------------
+ 
+rule "Führt ein OpenHab System Reboot durch"
+ when
+    	 Item openHabRestart changed
+ then    	  
+        if (openHabRestart.state == ON) {
+             var text = "Führe einen Neustart von openHab durch ..."          
+             logInfo("System", text)
+			
+        }
+end
+
+rule "Führt ein RaspberryPi Reboot durch"
+ when
+    	 Item RaspberryPiRestart changed
+ then    	  
+        if (RaspberryPiRestart.state == ON) {
+             var text = "Führe einen Neustart des Raspberry PIs durch ..."          
+             logInfo("SystemRPI", text)
+			
+        }
+end

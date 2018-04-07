@@ -1,0 +1,1 @@
+Thing exec:command:RpiShutdown "Pi shutdown" [command="sudo reboot now",autorun=false]

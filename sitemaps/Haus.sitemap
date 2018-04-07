@@ -1,0 +1,126 @@
+sitemap Haus label="Hauptmenü"
+{
+    Frame label="Räume"{
+    	
+	        Group item=gEG_Wohnen label="Wohnnzimmer"
+	        {
+				Slider item=EG_Wohnen_LG1_Dim label="Licht Tisch [%d %%]" icon="light" 
+				Slider item=EG_Wohnen_LG2_Dim label="Licht Mitte [%d %%]" icon="light" 
+				Slider item=EG_Wohnen_LG3_Dim label="Licht Sofa [%d %%]" icon="light" 
+	        	Switch item=EG_Wohnen_Rolladen1  
+	        	Switch item=EG_Wohnen_Rolladen2   
+	        	Text item=EG_Wohnen_Fenst1 
+	        	Text item=EG_Wohnen_Fenst2 
+	        	Text item=EG_Wohnen_Tuer1
+	        	Group item=gEG_Wohnen_Hzg label="Heizung"
+	        	{	        		
+			        Text item=EG_Wohnen_Raumtemperatur_MW label="Raumtemperatur Ist [%.1f °C]"
+			        Setpoint item=EG_Wohnen_Raumtemperatur_SW label="Raumtemperatur Soll [%.1f °C]" icon="none" step=0.5 minValue=14 maxValue=30
+			        Text item=EG_Wohnen_Heizung_Regler label="Reglerausgang [%.1f %%]" 
+	        	}
+	        	Switch item=EG_Wohnen_Steckd1 label="Steckdose 1" icon="poweroutlet_eu"  mappings=[ON="An", OFF="Aus"]
+	        	Switch item=EG_Wohnen_Steckd2 label="Steckdose 2" icon="poweroutlet_eu"  mappings=[ON="An", OFF="Aus"]
+	        }
+	        
+	        Group item=gEG_Buero label="Büro"
+	        {
+				Slider item=EG_Buero_LG1_Dim label="Licht 1 [%d %%]" icon="light" 
+	        	Switch item=EG_Buero_Rolladen1  
+	        	Switch item=EG_Buero_Rolladen2
+	        	Text item=EG_Buero_Fenst1
+	        	Text item=EG_Buero_Fenst2
+	        	Group item=gEG_Buero_Hzg label="Heizung"
+	        	{	        		
+			        Text item=EG_Buero_Raumtemperatur_MW label="Raumtemperatur Ist [%.1f °C]"
+			        Setpoint item=EG_Buero_Raumtemperatur_SW label="Raumtemperatur Soll [%.1f °C]" icon="none" step=0.5 minValue=14 maxValue=30
+			        Text item=EG_Buero_Heizung_Regler label="Reglerausgang [%.1f %%]" 
+	        	}
+	        	Switch item=EG_Buero_Steckd1 label="Steckdose 1" icon="poweroutlet_eu"  mappings=[ON="An", OFF="Aus"]
+	        }
+	        
+	        Group item=gEG_Schlafen label="Schlafzimmer"
+	        {
+				Slider item=EG_Schlafen_LG1_Dim label="Licht 1 [%d %%]" icon="light" 
+	        	Switch item=EG_Schlafen_Rolladen1  
+	        	Text item=EG_Schlafen_Tuer1
+	        	Group item=gEG_Schlafen_Hzg label="Heizung"
+	        	{	        		
+			        Text item=EG_Schlafen_Raumtemperatur_MW label="Raumtemperatur Ist [%.1f °C]"
+			        Setpoint item=EG_Schlafen_Raumtemperatur_SW label="Raumtemperatur Soll [%.1f °C]" icon="none" step=0.5 minValue=14 maxValue=30
+			        Text item=EG_Schlafen_Heizung_Regler label="Reglerausgang [%.1f %%]" 
+	        	}
+	        	Switch item=EG_Schlafen_Steckd1 label="Steckdose 1" icon="poweroutlet_eu"  mappings=[ON="An", OFF="Aus"]
+	        }
+	        
+	        Group item=gEG_Hobby label="Hobbyzimmer"
+	        {
+				Slider item=EG_Hobby_LG1_Dim label="Licht 1 [%d %%]" icon="light" 
+	        	Switch item=EG_Hobby_Rolladen1  
+	        	Text item=EG_Hobby_Fenst1
+	        	Group item=gEG_Hobby_Hzg label="Heizung"
+	        	{	        		
+			        Text item=EG_Hobby_Raumtemperatur_MW label="Raumtemperatur Ist [%.1f °C]"
+			        Setpoint item=EG_Hobby_Raumtemperatur_SW label="Raumtemperatur Soll [%.1f °C]" icon="none" step=0.5 minValue=14 maxValue=30
+			        Text item=EG_Hobby_Heizung_Regler label="Reglerausgang [%.1f %%]" 
+	        	}
+	        	Switch item=EG_Hobby_Steckd1 label="Steckdose 1" icon="poweroutlet_eu"  mappings=[ON="An", OFF="Aus"]
+	        }	        
+	        Group item=gEG_Kueche label="Küche"
+	        {
+				Slider item=EG_Kueche_LG1_Dim label="Licht 1 [%d %%]" icon="light" 
+	        	Switch item=EG_Kueche_Rolladen1  
+	        	Text item=EG_Kueche_Fenst1
+	        	Group item=gEG_Kueche_Hzg label="Heizung"
+	        	{	        		
+			        Text item=EG_Kueche_Raumtemperatur_MW label="Raumtemperatur Ist [%.1f °C]"
+			        Setpoint item=EG_Kueche_Raumtemperatur_SW label="Raumtemperatur Soll [%.1f °C]" icon="none" step=0.5 minValue=14 maxValue=30
+			        Text item=EG_Kueche_Heizung_Regler label="Reglerausgang [%.1f %%]" 
+	        	}
+	        	Switch item=EG_Kueche_Steckd1 label="Steckdose 1" icon="poweroutlet_eu"  mappings=[ON="An", OFF="Aus"]
+	        }
+	        
+	        Group item=gEG_Bad label="Bad"
+	        {
+				Slider item=EG_Bad_LG1_Dim label="Licht 1 [%d %%]" icon="light" 
+				Colorpicker item=EG_Bad_RGB_Color
+	        	Switch item=EG_Bad_Rolladen1  
+	        	Text item=EG_Bad_Fenst1
+	        	Text item=EG_Bad_Fenst2
+	        	Group item=gEG_Bad_Hzg label="Heizung"
+	        	{	        		
+			        Text item=EG_Bad_Raumtemperatur_MW label="Raumtemperatur Ist [%.1f °C]"
+			        Setpoint item=EG_Bad_Raumtemperatur_SW label="Raumtemperatur Soll [%.1f °C]" icon="none" step=0.5 minValue=14 maxValue=30
+			        Text item=EG_Bad_Heizung_Regler1 label="Reglerausgang [%.1f %%]" 
+			        Text item=EG_Bad_Heizung_Regler2 label="Reglerausgang [%.1f %%]" 
+	        	}
+	        	Switch item=EG_Bad_Steckd1 label="Steckdose 1" icon="poweroutlet_eu"  mappings=[ON="An", OFF="Aus"]
+	        }
+	        
+	        Group item=gEG_Flur label="Flur"
+	        {
+				Slider item=EG_Flur_LG1_Dim label="Licht 1 [%d %%]" icon="light" 
+				Slider item=EG_Flur_LG2_Dim label="Licht 2 [%d %%]" icon="light" 
+	        }
+									
+}
+
+//Frame label="Fenster"{
+//	Group item=gFenster
+//}
+
+//Frame label="Allgemein"{
+//	        Switch item=EG_Kueche_Schronsteinfeger
+
+
+Frame label="Zentral" {          		
+	        	Switch item=EG_Zentral_Beleuchtung label="Gesamte Beleuchtung" icon="light"  
+	        	Switch item=EG_Zentral_Rolladen 
+	        	
+} 
+
+
+
+}
+
+//	        	Colorpicker item=RGB icon="slider"
+

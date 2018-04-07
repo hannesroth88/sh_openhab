@@ -1,0 +1,21 @@
+import java.awt.Color
+
+rule "Set Bad RGB value"
+	when
+		Item EG_Bad_RGB_Color changed
+	then
+		logInfo("RGB.EG_Bad_RGB_Color", "EG_Bad_RGB_Color changed: "+ EG_Bad_RGB_Color)
+		var hsbValue = EG_Bad_RGB_Color.state as HSBType
+		
+		var Color color = Color::getHSBColor(hsbValue.hue.floatValue / 360, hsbValue.saturation.floatValue / 100, hsbValue.brightness.floatValue / 100)
+		
+		var redValue = (color.red.floatValue / 2.55).intValue
+		var greenValue = (color.green.floatValue / 2.55).intValue
+		var blueValue = (color.blue.floatValue / 2.55).intValue
+		logInfo("RGB.EG_Bad_RGB_Color", "RED: "+ color.red.intValue + "% GREEN: "+ color.green +  "% BLUE: "+ color.blue + "%")
+		
+		postUpdate(EG_Bad_LedR, redValue)
+		postUpdate(EG_Bad_LedG, greenValue)
+		postUpdate(EG_Bad_LedB, blueValue)
+		
+end
