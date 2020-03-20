@@ -1,0 +1,151 @@
+	Bridge knx:ip:bridge "Wago KNX/IP Router" [ 
+    ipAddress="224.0.23.12", //ipAddress="192.168.2.5", Bei type="Tunnel",
+    portNumber=3671, 
+    localIp="192.168.2.4", 
+    type="ROUTER", 
+    readingPause=50, 
+    responseTimeout=10, 
+    readRetriesLimit=3, 
+    autoReconnectPeriod=1,
+	localSourceAddr="1.1.241" 
+	//1.1.241
+] {
+    Thing device EG_Technik_Wago "Wago KNX" [
+        address="1.0.1",
+        fetch=true,
+        pingInterval=600,
+        readInterval=10
+    ] {
+    	/*-----------EG Buero-----------*/
+        Type dimmer			: EG_Buero_LG1_Dim [ switch="1/5/4+<1/2/4", increaseDecrease="1/6/4", position="1/3/7+<1/4/7" ]
+		/*Heizung*/
+        Type number			: EG_Buero_Raumtemperatur_SW	[ ga="9.001:3/2/2" ]
+        Type number			: EG_Buero_Raumtemperatur_MW	[ ga="9.001:<3/1/2" ]
+        Type dimmer			: EG_Buero_Heizung_Regler		[ position="5.001:<3/5/2" ]
+        /* Steckdosen */
+        Type switch    		: EG_Buero_Steckd1				[ ga="6/1/2" ]
+        /* Fenster */
+        Type contact		: EG_Buero_Fenst1       		[ ga="4/1/3" ]
+        Type contact		: EG_Buero_Fenst2       		[ ga="4/1/4" ]
+        /* Rolladen */
+        Type rollershutter 	: EG_Buero_Rolladen1 			[ upDown="2/1/2", stopMove="2/4/2", position="2/2/2" ]
+        Type rollershutter 	: EG_Buero_Rolladen2 			[ upDown="2/1/3", stopMove="2/4/3", position="2/2/3" ]
+    	
+    	/*-----------EG Schlafen-----------*/
+        Type dimmer			: EG_Schlafen_LG1_Dim 			[ switch="1/5/17+<1/2/17", increaseDecrease="1/6/17", position="1/3/20+<1/3/17" ]
+		/*Heizung*/
+        Type number			: EG_Schlafen_Raumtemperatur_SW	[ ga="9.001:3/2/5" ]
+        Type number			: EG_Schlafen_Raumtemperatur_MW	[ ga="9.001:<3/1/5" ]
+        Type dimmer			: EG_Schlafen_Heizung_Regler	[ position="5.001:<3/5/5" ]
+        /* Steckdosen */
+        Type switch    		: EG_Schlafen_Steckd1			[ ga="6/1/8" ]
+        /* Fenster */
+        Type contact		: EG_Schlafen_Tuer1       		[ ga="4/1/7" ]
+        /* Rolladen */
+        Type rollershutter 	: EG_Schlafen_Rolladen1 		[ upDown="2/1/6", stopMove="2/4/6", position="2/2/6" ]
+
+		/*-----------EG Hobby-----------*/
+        Type dimmer			: EG_Hobby_LG1_Dim 				[ switch="1/5/9+<1/2/9", increaseDecrease="1/6/9", position="1/3/12+<1/4/12" ]
+		/*Heizung*/
+        Type number			: EG_Hobby_Raumtemperatur_SW	[ ga="9.001:3/2/3" ]
+        Type number			: EG_Hobby_Raumtemperatur_MW	[ ga="9.001:<3/1/3" ]
+        Type dimmer			: EG_Hobby_Heizung_Regler		[ position="5.001:<3/5/3" ]
+        /* Steckdosen */
+        Type switch    		: EG_Hobby_Steckd1				[ ga="6/1/4" ]
+        /* Fenster */
+        Type contact		: EG_Hobby_Fenst1       		[ ga="4/1/5" ]
+        /* Rolladen */
+        Type rollershutter 	: EG_Hobby_Rolladen1 			[ upDown="2/1/4", stopMove="2/4/4", position="2/2/4" ]
+
+		/*-----------EG Küche-----------*/
+        Type dimmer			: EG_Kueche_LG1_Dim 			[ switch="1/5/11+<1/2/11", increaseDecrease="1/6/11", position="1/3/14+<1/4/14" ]
+        Type dimmer			: EG_Kueche_LG2_Dim 			[ switch="1/5/12+<1/2/12", increaseDecrease="1/6/12", position="1/3/15+<1/4/15" ]
+        Type dimmer			: EG_Kueche_LG4_Dim 			[ switch="1/5/14+<1/2/14", increaseDecrease="1/6/14", position="1/3/17+<1/4/17" ]
+        Type switch    		: EG_Kueche_LG5					[ ga="1/5/15+1/2/15" ]
+        Type switch    		: EG_Kueche_LG6					[ ga="1/5/16+1/2/16" ]
+		/*Heizung*/
+        Type number			: EG_Kueche_Raumtemperatur_SW	[ ga="9.001:3/2/4" ]
+        Type number			: EG_Kueche_Raumtemperatur_MW	[ ga="9.001:<3/1/4" ]
+        Type dimmer			: EG_Kueche_Heizung_Regler		[ position="5.001:<3/5/4" ]
+        /* Steckdosen */
+        Type switch    		: EG_Kueche_Steckd1				[ ga="6/1/6" ]
+        /* Fenster */
+        Type contact		: EG_Kueche_Fenst1       		[ ga="4/1/6" ]
+        /* Rolladen */
+        Type rollershutter 	: EG_Kueche_Rolladen1 			[ upDown="2/1/5", stopMove="2/4/5", position="2/2/5" ]
+        /* Sonstiges */
+        Type switch    		: EG_Kueche_Schornsteinfeger	[ ga="0/0/4" ]
+		
+		/*-----------EG Wohnen-----------*/
+		/*Beleuchtung*/
+        Type dimmer			: EG_Wohnen_LG1_Dim 			[ switch="1/5/19+<1/2/19", increaseDecrease="1/6/19", position="1/3/22+<1/4/22" ]
+		Type dimmer			: EG_Wohnen_LG2_Dim 			[ switch="1/5/20+<1/2/20", increaseDecrease="1/6/20", position="1/3/23+<1/4/23" ]
+		Type dimmer			: EG_Wohnen_LG3_Dim 			[ switch="1/5/21+<1/2/21", increaseDecrease="1/6/21", position="1/3/24+<1/4/24" ]
+        Type switch    		: EG_Wohnen_Esstischlampe		[ ga="1/5/23+1/2/23" ]
+        
+        Type switch    		: EG_Wohnen_RGB_An				[ ga="1/5/22" ]
+        Type dimmer			: EG_Wohnen_LedR 				[ switch="1/5/22", increaseDecrease="1/6/22", position="1/3/25+<1/4/25" ]
+		Type dimmer			: EG_Wohnen_LedG 				[ switch="1/5/22", increaseDecrease="1/6/22", position="1/3/26+<1/4/26" ]
+		Type dimmer			: EG_Wohnen_LedB 				[ switch="1/5/22", increaseDecrease="1/6/22", position="1/3/27+<1/4/27" ]
+		Type dimmer			: EG_Wohnen_LedW 				[ switch="1/5/22", increaseDecrease="1/6/22", position="1/3/28+<1/4/28" ]
+        Type switch    		: EG_Wohnen_RGB_Szene			[ ga="1/7/4" ]
+ 		/*Heizung*/
+        Type number			: EG_Wohnen_Raumtemperatur_SW	[ ga="9.001:3/2/6" ]
+        Type number			: EG_Wohnen_Raumtemperatur_MW	[ ga="9.001:<3/1/6" ]
+        Type dimmer			: EG_Wohnen_Heizung_Regler		[ position="5.001:<3/5/6" ]
+        /* Steckdosen */
+        Type switch    		: EG_Wohnen_Steckd1				[ ga="6/1/10" ]
+        Type switch    		: EG_Wohnen_Steckd2				[ ga="6/1/11" ]
+        /* Fenster */
+        Type contact		: EG_Wohnen_Fenst1       		[ ga="4/1/8" ]
+        Type contact		: EG_Wohnen_Fenst2       		[ ga="4/1/9" ]
+        Type contact		: EG_Wohnen_Tuer1       		[ ga="4/1/10" ]
+        /* Rolladen */
+        Type rollershutter 	: EG_Wohnen_Rolladen1 			[ upDown="2/1/7", stopMove="2/4/7", position="2/2/7" ]
+        Type rollershutter 	: EG_Wohnen_Rolladen2 			[ upDown="2/1/8", stopMove="2/4/8", position="2/2/8" ]
+ 		
+ 				
+		/*-----------EG Bad-----------*/
+		/*Beleuchtung*/
+        Type dimmer			: EG_Bad_LG1_Dim 				[ switch="1/5/1+<1/2/1", increaseDecrease="1/6/1", position="1/3/1+<1/4/1" ]
+        Type switch    		: EG_Bad_RGB_An					[ ga="1/5/3" ]
+        Type dimmer			: EG_Bad_LedR 					[ switch="1/5/3", increaseDecrease="1/6/3", position="1/3/3+<1/4/3" ]
+		Type dimmer			: EG_Bad_LedG 					[ switch="1/5/3", increaseDecrease="1/6/3", position="1/3/4+<1/4/4" ]
+		Type dimmer			: EG_Bad_LedB 					[ switch="1/5/3", increaseDecrease="1/6/3", position="1/3/5+<1/4/5" ]
+        Type switch    		: EG_Bad_RGB_Szene				[ ga="1/7/5" ]
+ 		/*Heizung*/
+        Type number			: EG_Bad_Raumtemperatur_SW		[ ga="9.001:3/2/1" ]
+        Type number			: EG_Bad_Raumtemperatur_MW		[ ga="9.001:<3/1/1" ]
+        Type dimmer			: EG_Bad_Heizung_Regler1		[ position="5.001:<3/5/0" ]
+        Type dimmer			: EG_Bad_Heizung_Regler2		[ position="5.001:<3/5/1" ]
+        /* Steckdosen */
+        Type switch    		: EG_Bad_Steckd1				[ ga="6/1/0" ]
+        /* Fenster */
+        Type contact		: EG_Bad_Fenst1       			[ ga="4/1/1" ]
+        Type contact		: EG_Bad_Fenst2       			[ ga="4/1/2" ]
+        /* Rolladen */
+        Type rollershutter 	: EG_Bad_Rolladen1 				[ upDown="2/1/1", stopMove="2/4/1", position="2/2/1" ]
+ 		
+		/*-----------EG Flur-----------*/
+		/*Beleuchtung*/
+		Type dimmer			: EG_Flur_LG1_Dim 				[ switch="1/5/6+<1/2/6", increaseDecrease="1/6/6", position="1/3/9+<1/3/6" ]
+		Type dimmer			: EG_Flur_LG2_Dim 				[ switch="1/5/7+<1/2/7", increaseDecrease="1/6/7", position="1/3/10+<1/3/7" ]
+		Type switch    		: EG_Flur_Tablet_Battery		[ ga="6/1/14" ]
+        Type contact		: EG_Flur_Praesenz       		[ ga="5/1/1" ]
+        
+		/*-----------Allgemein-----------*/
+		Type switch    		: EG_Zentral_Beleuchtung		[ ga="1/0/1" ]
+    	Type rollershutter 	: EG_Zentral_Rolladen 			[ upDown="2/0/0", stopMove="2/0/1", position="2/2/4" ]
+ 		Type rollershutter  : EG_Fassade_Lager				[ upDown="2/0/2", stopMove="2/0/1"] // for now stop all
+ 		Type rollershutter  : EG_Fassade_Terrasse			[ upDown="2/0/3", stopMove="2/0/1"] // for now stop all
+ 		Type rollershutter  : EG_Fassade_Strasse			[ upDown="2/0/4", stopMove="2/0/1"] // for now stop all
+		Type switch    		: EG_Rolloautomatik				[ ga="0/0/5" ]
+		Type switch    		: EG_Hitzeschutz				[ ga="0/0/6" ]
+ 		
+        Type datetime-control      : Astro_Sunrise_Time 			[ ga="10.001:0/2/3" ]
+        Type datetime-control      : Astro_Sunset_Time				[ ga="10.001:0/2/4" ]
+ 		
+ 		Type datetime-control : ntpZeit 					[ ga="10.001:0/0/2" ]
+		Type datetime-control : ntpDatum  					[ ga="11.001:0/0/1" ]
+    }
+}

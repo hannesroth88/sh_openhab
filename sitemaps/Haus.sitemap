@@ -1,12 +1,16 @@
 sitemap Haus label="Hauptmenü"
 {
     Frame label="Räume"{
-    	
+    				
 	        Group item=gEG_Wohnen label="Wohnnzimmer"
 	        {
 				Slider item=EG_Wohnen_LG1_Dim label="Licht Tisch [%d %%]" icon="light" 
 				Slider item=EG_Wohnen_LG2_Dim label="Licht Mitte [%d %%]" icon="light" 
 				Slider item=EG_Wohnen_LG3_Dim label="Licht Sofa [%d %%]" icon="light" 
+	        	Switch item=EG_Wohnen_Esstischlampe label="Esstischlampe" icon="light"  mappings=[ON="An", OFF="Aus"]
+				Colorpicker item=EG_Wohnen_RGB_Color
+	        	Switch item=EG_Wohnen_RGB_Szene icon="rgb"  mappings=[ON="An", OFF="Aus"]
+				Slider item=EG_Wohnen_LedW label="RGBW Weiß [%d %%]" icon="light" 
 	        	Switch item=EG_Wohnen_Rolladen1  
 	        	Switch item=EG_Wohnen_Rolladen2   
 	        	Text item=EG_Wohnen_Fenst1 
@@ -68,6 +72,10 @@ sitemap Haus label="Hauptmenü"
 	        Group item=gEG_Kueche label="Küche"
 	        {
 				Slider item=EG_Kueche_LG1_Dim label="Licht 1 [%d %%]" icon="light" 
+				Slider item=EG_Kueche_LG2_Dim label="Küchenzeile ind. [%d %%]" icon="light"
+				Slider item=EG_Kueche_LG4_Dim label="Bartisch [%d %%]" icon="light" 
+	        	Switch item=EG_Kueche_LG5 label="Unterschrank links" icon="light"  mappings=[ON="An", OFF="Aus"]
+	        	Switch item=EG_Kueche_LG6 label="Unterschrank rechts" icon="light"  mappings=[ON="An", OFF="Aus"]
 	        	Switch item=EG_Kueche_Rolladen1  
 	        	Text item=EG_Kueche_Fenst1
 	        	Group item=gEG_Kueche_Hzg label="Heizung"
@@ -77,12 +85,14 @@ sitemap Haus label="Hauptmenü"
 			        Text item=EG_Kueche_Heizung_Regler label="Reglerausgang [%.1f %%]" 
 	        	}
 	        	Switch item=EG_Kueche_Steckd1 label="Steckdose 1" icon="poweroutlet_eu"  mappings=[ON="An", OFF="Aus"]
+	        	Switch item=EG_Kueche_Schornsteinfeger label="Schornsteinfeger" icon=""  mappings=[ON="Ist da", OFF="Nicht da"]
 	        }
 	        
 	        Group item=gEG_Bad label="Bad"
-	        {
+	        { 
 				Slider item=EG_Bad_LG1_Dim label="Licht 1 [%d %%]" icon="light" 
 				Colorpicker item=EG_Bad_RGB_Color
+	        	Switch item=EG_Bad_RGB_Szene icon="rgb"  mappings=[ON="An", OFF="Aus"]
 	        	Switch item=EG_Bad_Rolladen1  
 	        	Text item=EG_Bad_Fenst1
 	        	Text item=EG_Bad_Fenst2
@@ -93,34 +103,75 @@ sitemap Haus label="Hauptmenü"
 			        Text item=EG_Bad_Heizung_Regler1 label="Reglerausgang [%.1f %%]" 
 			        Text item=EG_Bad_Heizung_Regler2 label="Reglerausgang [%.1f %%]" 
 	        	}
-	        	Switch item=EG_Bad_Steckd1 label="Steckdose 1" icon="poweroutlet_eu"  mappings=[ON="An", OFF="Aus"]
+	        	Switch item=EG_Bad_Steckd1 label="Spiegelschrank" icon="light"  mappings=[ON="An", OFF="Aus"]
 	        }
 	        
 	        Group item=gEG_Flur label="Flur"
 	        {
 				Slider item=EG_Flur_LG1_Dim label="Licht 1 [%d %%]" icon="light" 
-				Slider item=EG_Flur_LG2_Dim label="Licht 2 [%d %%]" icon="light" 
+				Slider item=EG_Flur_LG2_Dim label="Träger [%d %%]" icon="light"
+	        	Switch item=EG_Flur_Tablet_Battery label="Tablet Laden" icon="poweroutlet_eu"  mappings=[ON="An", OFF="Aus"]
+				 
 	        }
-									
+								
 }
-
-//Frame label="Fenster"{
-//	Group item=gFenster
-//}
-
-//Frame label="Allgemein"{
-//	        Switch item=EG_Kueche_Schronsteinfeger
 
 
 Frame label="Zentral" {          		
-	        	Switch item=EG_Zentral_Beleuchtung label="Gesamte Beleuchtung" icon="light"  
+	        	Switch item=EG_Zentral_Beleuchtung label="Gesamte Beleuchtung" icon="light" mappings=[OFF="Aus"]  
 	        	Switch item=EG_Zentral_Rolladen 
-	        	
-} 
-
-
-
+	        	Switch item=EG_Fassade_Lager
+	        	Switch item=EG_Fassade_Terrasse
+	        	Switch item=EG_Fassade_Strasse
+}
+Frame label="Wetter" {        		
+	        	Webview url="/weather?locationId=home&layout=example&iconset=colorful" height=8 icon=none
+	        	Text item=Astro_Sunrise_Time
+	        	Text item=Astro_Sunset_Time
+	        	Text item=Azimuth
+	        	Text item=Elevation
 }
 
-//	        	Colorpicker item=RGB icon="slider"
+Frame label="Allgemein"{
+	        	//Group item=gWeather label="Wetter"
+	        	Group item=gHeizung label="Heizung"
+				Group item=gFenster label="Fenster"		
+				Group item=gEG_Rolladen label="Rolladen"{
+			  	  Frame label="Status" {
+			        Text item=EG_Buero_Rolladen1 label="Büro Terrasse [%d %%]"
+			        Text item=EG_Buero_Rolladen2 label="Büro Strasse [%d %%]"
+			        Text item=EG_Schlafen_Rolladen1 label="Schlafen [%d %%]"
+			        Text item=EG_Kueche_Rolladen1 label="Küche [%d %%]"
+			        Text item=EG_Wohnen_Rolladen1 label="Wohnen Fenster [%d %%]"
+			        Text item=EG_Wohnen_Rolladen2 label="Wohnen Tür [%d %%]"
+			        Text item=EG_Bad_Rolladen1 label="Bad [%d %%]"
+					}
+			        
+			  	  Frame label="Einstellungen" {
+					/*-----------Konfiguration Rolladen Hitzeschutz-----------*/
+					Switch item= EG_Rolloautomatik  mappings=[ON="An", OFF="Aus"]
+					//Switch item= EG_Hitzeschutz visibility=[EG_Rolloautomatik=="ON"] //wird nun von der Regel gesetzt
+					Text item= EG_Hitzeschutz icon="sun" //wird nun von der Regel gesetzt
+					Setpoint item= EG_Hitzeschutz_SW_MaxTemp minValue=20 maxValue=40 step=1
+					Setpoint item= EG_SW_Azimuth_Fassade_LagerAb minValue=0 maxValue=360 step=10
+					Setpoint item= EG_SW_Azimuth_Fassade_LagerAuf minValue=0 maxValue=360 step=10
+					Setpoint item= EG_SW_Azimuth_Fassade_TerrasseAb minValue=0 maxValue=360 step=10
+					Setpoint item= EG_SW_Azimuth_Fassade_StrasseAb minValue=0 maxValue=360 step=10
+			      }
+			  	  Frame label="letzte Fahrten" {
+					Text item= EG_Rolloautomatik_Zentral_LastAuf icon="calendar" label="Rolladen Sonnenaufgang [%1$ta, %1$tB  %1$td, %1$tY - %1$tI:%1$tM %1$Tp]"
+					Text item= EG_Rolloautomatik_Zentral_LastAb icon="calendar" label="Rolladen Sonnenuntergang [%1$ta, %1$tB  %1$td, %1$tY - %1$tI:%1$tM %1$Tp]"
+					Text item= EG_Rolloautomatik_Lager_LastAb icon="calendar" label="Rolladen Ab Lager [%1$ta, %1$tB  %1$td, %1$tY - %1$tI:%1$tM %1$Tp]"
+					Text item= EG_Rolloautomatik_Terrasse_LastAb icon="calendar" label="Rolladen Ab Terrasse [%1$ta, %1$tB  %1$td, %1$tY - %1$tI:%1$tM %1$Tp]"
+					Text item= EG_Rolloautomatik_Strasse_LastAb icon="calendar" label="Rolladen Ab Strasse [%1$ta, %1$tB  %1$td, %1$tY - %1$tI:%1$tM %1$Tp]"
+					Text item= EG_Rolloautomatik_Lager_LastAuf icon="calendar" label="Rolladen Auf Lager [%1$ta, %1$tB  %1$td, %1$tY - %1$tI:%1$tM %1$Tp]"
+			      }
+			      }
+				Group item=gLog label="Logger" icon="text"{
+			      Webview url="http://192.168.2.4:9001/" height=500  icon=none
+			      }
+			      
+			      		
+}
 
+} //end of sitemap

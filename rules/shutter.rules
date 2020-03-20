@@ -1,0 +1,235 @@
+
+// from https://www.forwardme.de/2018/03/12/elektrischen-rolladen-abhaengig-von-sonnenstand-und-wetter-steuern-lassen-mit-openhab2/
+
+var erliestRun
+var latestRun
+var boolean log = true
+var EG_Hitzeschutz_SW_MaxTemp_Default = 25
+//Default SWs
+var EG_SW_Azimuth_Fassade_LagerAb_Default = 80
+var EG_SW_Azimuth_Fassade_LagerAuf_Default = 220
+var EG_SW_Azimuth_Fassade_TerrasseAb_Default = 120
+var EG_SW_Azimuth_Fassade_StrasseAb_Default = 220
+var String timeLastAb
+var String timeLastAuf
+var String timeNow
+
+rule "Rollos-Automatik"
+when Item Azimuth changed
+then    
+    var Number day = now.getDayOfWeek
+    if(day == 6 || day == 7){
+        //weekend
+        erliestRun = 8
+        latestRun = 23
+    } else {
+        //workday
+        erliestRun = 6
+        latestRun = 22
+    }
+
+    var String logPrefix = 'Rolloautomatik Hitzeschutz - '
+    timeNow = now.toString().substring(0,10)
+
+    // Aktiviere/Deaktiviere Hitzeschutz abhängig von Max Temperatur Wetterbericht und Grenzwert, wenn Hitzeschutz bereits geforderten Zustand dann nichts machen
+    if (EG_Hitzeschutz_SW_MaxTemp.state == NULL){
+        if (log) logInfo('rules', logPrefix + 'kein Sollwerte für Temperatur Grenzwert festgelegt, setze Standard Wert.')
+        EG_Hitzeschutz_SW_MaxTemp.postUpdate(EG_Hitzeschutz_SW_MaxTemp_Default)
+    }
+    if (log) logInfo('rules', logPrefix + 'Hitzeschutz=' + EG_Hitzeschutz.state + '     MaxTemp=' + Temp_Max.state + '°C     SW Grenztemperatur=' + EG_Hitzeschutz_SW_MaxTemp.state + '°C')
+    if ((Temp_Max.state > EG_Hitzeschutz_SW_MaxTemp.state) && (EG_Hitzeschutz.state == OFF || EG_Hitzeschutz.state == NULL) ){
+        if (log) logInfo('rules', logPrefix + 'Hitzeschutz wurde aktiviert -> MaxTemp=' + Temp_Max.state + '°C > SW Grenztemperatur=' + EG_Hitzeschutz_SW_MaxTemp.state + '°C')
+        sendCommand(EG_Hitzeschutz, ON);
+    } else if(Temp_Max.state <= EG_Hitzeschutz_SW_MaxTemp.state && ( EG_Hitzeschutz.state == ON || EG_Hitzeschutz.state == NULL) ){
+        if (log) logInfo('rules', logPrefix + 'Hitzeschutz wurde deaktiviert -> MaxTemp=' + Temp_Max.state + '°C < SW Grenztemperatur=' + EG_Hitzeschutz_SW_MaxTemp.state + '°C')
+        sendCommand(EG_Hitzeschutz, OFF); 
+    } else {
+        if (log) logInfo('rules', logPrefix + 'Hitzeschutz nicht verändert')
+    }
+
+
+    if (EG_Rolloautomatik.state == ON) {
+        if (now.getHourOfDay() >= erliestRun && now.getHourOfDay() <= latestRun ) {
+            if (EG_Hitzeschutz.state == ON) {
+                
+                // ############## Fassade Lager AufAb ##############
+                // Nur Lager fährt zusätzlich hoch
+                logPrefix = 'Rolloautomatik Lager Hitzeschutz (Rollo AufAb) - '
+                if (log) logInfo('rules', logPrefix + 'Regel wurde gestartet') 
+                timeLastAb = 'xxxx-xx-xx'
+                timeLastAuf = 'xxxx-xx-xx'
+
+                if (EG_SW_Azimuth_Fassade_LagerAb.state == NULL){
+                    if (log) logInfo('rules', logPrefix + 'keine Ab Sollwerte festgelegt, setze Standard Wert.')
+                    EG_SW_Azimuth_Fassade_LagerAb.postUpdate(EG_SW_Azimuth_Fassade_LagerAb_Default)
+                }
+                if (EG_SW_Azimuth_Fassade_LagerAuf.state == NULL){
+                    if (log) logInfo('rules', logPrefix + 'keine Auf Sollwerte festgelegt, setze auf Standard Wert.')
+                    EG_SW_Azimuth_Fassade_LagerAuf.postUpdate(EG_SW_Azimuth_Fassade_LagerAuf_Default)
+                }
+
+                if (EG_Rolloautomatik_Lager_LastAb.state == NULL) {
+                    if (log) logInfo('rules', logPrefix + 'Erstmalige Ausführung Rollo Ab, Belegung mit Initialwert')
+                } else {
+                    timeLastAb = EG_Rolloautomatik_Lager_LastAb.state.toString().substring(0,10)
+                }
+                if (EG_Rolloautomatik_Lager_LastAuf.state == NULL) {
+                    if (log) logInfo('rules', logPrefix + 'Erstmalige Ausführung Rollo Auf, Belegung mit Initialwert')
+                } else {
+                    timeLastAuf = EG_Rolloautomatik_Lager_LastAuf.state.toString().substring(0,10)
+                }
+                
+                    if (timeNow != timeLastAb) {
+                        if (Azimuth.state >= Integer::parseInt(EG_SW_Azimuth_Fassade_LagerAb.state.toString()) && Azimuth.state < Integer::parseInt(EG_SW_Azimuth_Fassade_LagerAuf.state.toString())) {
+                            // Rollos fahren
+                            if (log) logInfo('rules', logPrefix + 'Rollos werden abgefahren')
+                            sendCommand(EG_Fassade_Lager, DOWN); 
+                            // Letzte Ausführung mit entsprechendem Zeitstempel belegen
+                            EG_Rolloautomatik_Lager_LastAb.postUpdate(now.toString())
+                        } else {
+                            if (log) logInfo('rules', logPrefix + 'aktueller Sonnenwinkel ' + Azimuth.state.toString() + '° ist kleiner als Sollwert Ab(' + EG_SW_Azimuth_Fassade_LagerAb.state.toString() + '°)')
+                        }    
+                    } else {
+                        if (log) logInfo('rules', logPrefix + 'Ab Automatik heute bereits einmal gelaufen, wird daher ignoriert')
+                    }
+                    
+                    if (timeNow != timeLastAuf) {
+                            if (Azimuth.state >= Integer::parseInt(EG_SW_Azimuth_Fassade_LagerAuf.state.toString())) {
+                                // Rollos fahren
+                                if (log) logInfo('rules', logPrefix + 'Rollos werden aufgefahren')
+                                sendCommand(EG_Fassade_Lager, UP); 
+                                // Letzte Ausführung mit entsprechendem Zeitstempel belegen
+                                EG_Rolloautomatik_Lager_LastAuf.postUpdate(now.toString())
+                            } else {
+                                if (log) logInfo('rules', logPrefix + 'aktueller Sonnenwinkel ' + Azimuth.state.toString() + '° ist kleiner als Sollwert Auf(' + EG_SW_Azimuth_Fassade_LagerAuf.state.toString() + '°)')
+                            }                                      
+                    } else {
+                        if (log) logInfo('rules', logPrefix + 'Auf Automatik heute bereits einmal gelaufen, wird daher ignoriert')
+                    }                             
+                
+            
+
+
+
+                
+                // ############## Fassade Terrasse ab ##############
+                logPrefix = 'Rolloautomatik Terrasse Hitzeschutz (Rollo ab) - '
+                if (log) logInfo('rules', logPrefix + 'Regel wurde gestartet')
+                timeLastAb = 'xxxx-xx-xx'
+
+                if (EG_SW_Azimuth_Fassade_TerrasseAb.state == NULL){
+                    if (log) logInfo('rules', logPrefix + 'keine Ab Sollwerte festgelegt, setze Standard Wert.')
+                    EG_SW_Azimuth_Fassade_TerrasseAb.postUpdate(EG_SW_Azimuth_Fassade_TerrasseAb_Default)
+                }
+                if (EG_Rolloautomatik_Terrasse_LastAb.state == NULL) {
+                    if (log) logInfo('rules', logPrefix + 'Erstmalige Ausführung, Belegung mit Initialwert')
+                } else {
+                    timeLastAb = EG_Rolloautomatik_Terrasse_LastAb.state.toString().substring(0,10)
+                }
+                    if (timeNow != timeLastAb) {
+                            if (Azimuth.state >= Integer::parseInt(EG_SW_Azimuth_Fassade_TerrasseAb.state.toString())) {
+                                // Rollos fahren
+                                if (log) logInfo('rules', logPrefix + 'Rollos werden abgefahren')
+                                sendCommand(EG_Fassade_Terrasse, DOWN); 
+                                // Letzte Ausführung mit entsprechendem Zeitstempel belegen
+                                EG_Rolloautomatik_Terrasse_LastAb.postUpdate(now.toString())
+                            } else {
+                                if (log) logInfo('rules', logPrefix + 'aktueller Sonnenwinkel ' + Azimuth.state.toString() + '° ist kleiner als Sollwert Ab (' + EG_SW_Azimuth_Fassade_TerrasseAb.state.toString() + '°)')
+                            }                                      
+                    } else {
+                        if (log) logInfo('rules', logPrefix + 'Automatik heute bereits einmal gelaufen, wird daher ignoriert')
+                    }  
+                
+                
+
+
+
+                // ############## Fassade Strasse ab ##############
+                logPrefix = 'Rolloautomatik Strasse Hitzeschutz (Rollo ab) - '
+                if (log) logInfo('rules', logPrefix + 'Regel wurde gestartet')
+                timeLastAb = 'xxxx-xx-xx'
+
+                
+                if (EG_SW_Azimuth_Fassade_StrasseAb.state == NULL){
+                    if (log) logInfo('rules', logPrefix + 'keine Ab Sollwerte festgelegt, setze Standard Wert.')
+                    EG_SW_Azimuth_Fassade_StrasseAb.postUpdate(EG_SW_Azimuth_Fassade_StrasseAb_Default)
+                }
+                if (EG_Rolloautomatik_Strasse_LastAb.state == NULL) {
+                    if (log) logInfo('rules', logPrefix + 'Erstmalige Ausführung, Belegung mit Initialwert')
+                } else {
+                    timeLastAb = EG_Rolloautomatik_Strasse_LastAb.state.toString().substring(0,10)
+                }
+                
+                if (Temp_Max.state > Integer::parseInt(EG_Hitzeschutz_SW_MaxTemp.state.toString())){
+                    if (timeNow != timeLastAb) {
+                        if (Azimuth.state >= Integer::parseInt(EG_SW_Azimuth_Fassade_StrasseAb.state.toString())) {
+                            // Rollos fahren
+                            if (log) logInfo('rules', logPrefix + 'Rollos werden abgefahren')
+                            sendCommand(EG_Fassade_Strasse, DOWN); 
+                            // Letzte Ausführung mit entsprechendem Zeitstempel belegen
+                            EG_Rolloautomatik_Strasse_LastAb.postUpdate(now.toString())
+                        } else {
+                            if (log) logInfo('rules', logPrefix + 'aktueller Sonnenwinkel ' + Azimuth.state.toString() + '° ist kleiner als Sollwert Ab (' + EG_SW_Azimuth_Fassade_StrasseAb.state.toString() + '°)')
+                        }                                      
+                    } else {
+                        if (log) logInfo('rules', logPrefix + 'Automatik heute bereits einmal gelaufen, wird daher ignoriert')
+                    }
+                } else {
+                    if (log) logInfo('rules', logPrefix + 'Außentemperatur nicht warm genug für Hitzeschutz. MaxTemp=' + Temp_Max.state + '°C und Grenzwert=' + EG_Hitzeschutz_SW_MaxTemp + '°C')
+                }      
+            } else {
+
+                // ############## Rolloautomatik Zentral Sonnenhöhe ##############
+                // Rollautomatik=ON & Hitzeschutz=OFF & Zeitraum nicht gesperrt
+
+                // ############## Rolloautomatik Sonnenaufgang ##############
+                logPrefix = 'Rolloautomatik Sonnenaufgang Rollos Auf- '
+                timeLastAb = 'xxxx-xx-xx'
+                timeLastAuf = 'xxxx-xx-xx'
+                if (EG_Rolloautomatik_Zentral_LastAuf.state == NULL) {
+                    if (log) logInfo('rules', logPrefix + 'heute noch nicht gelaufen.')
+                } else {
+                    timeLastAuf = EG_Rolloautomatik_Zentral_LastAuf.state.toString().substring(0,10)
+                }
+
+                if (timeNow != timeLastAuf) {
+                    if (now.isAfter((Astro_Sunrise_Time.state as DateTimeType).zonedDateTime.toInstant.toEpochMilli)){
+                        sendCommand(EG_Zentral_Rolladen, UP); 
+                        // Letzte Ausführung mit entsprechendem Zeitstempel belegen
+                        EG_Rolloautomatik_Zentral_LastAuf.postUpdate(now.toString())
+                        if (log) logInfo('rules', logPrefix + 'Sonnenaufgang -> Rollos auf')
+                    }
+                }
+
+                // ############## Rolloautomatik Sonnenuntergang ##############
+                logPrefix = 'Rolloautomatik Sonnenuntergang Rollos Ab- '
+                timeLastAb = 'xxxx-xx-xx'
+                timeLastAuf = 'xxxx-xx-xx'
+                if (EG_Rolloautomatik_Zentral_LastAb.state == NULL) {
+                    if (log) logInfo('rules', logPrefix + 'heute noch nicht gelaufen.')
+                } else {
+                    timeLastAb = EG_Rolloautomatik_Zentral_LastAb.state.toString().substring(0,10)
+                }
+
+                if (timeNow != timeLastAb) {
+                    //if (now.isAfter((Astro_Sunset_Time.state as DateTimeType).calendar.timeInMillis)){
+                    if (now.isAfter((Astro_Sunset_Time.state as DateTimeType).zonedDateTime.toInstant.toEpochMilli)){
+                        sendCommand(EG_Zentral_Rolladen, DOWN); 
+                        // Letzte Ausführung mit entsprechendem Zeitstempel belegen
+                        EG_Rolloautomatik_Zentral_LastAb.postUpdate(now.toString())
+                        if (log) logInfo('rules', logPrefix + 'Sonnenuntergang -> Rollos ab')
+                    }
+                }
+
+
+            }
+
+
+        } else {
+                if (log) logInfo('rules', logPrefix + 'ist im gesperrten Zeitraum')
+            }
+    } else {
+        if (log) logInfo('rules', logPrefix + 'gesperrt, da Rolladenautomatik=AUS')
+    }
+end
+

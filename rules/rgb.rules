@@ -13,9 +13,28 @@ rule "Set Bad RGB value"
 		var greenValue = (color.green.floatValue / 2.55).intValue
 		var blueValue = (color.blue.floatValue / 2.55).intValue
 		logInfo("RGB.EG_Bad_RGB_Color", "RED: "+ color.red.intValue + "% GREEN: "+ color.green +  "% BLUE: "+ color.blue + "%")
+		sendCommand(EG_Bad_LedR, redValue)
+		sendCommand(EG_Bad_LedG, greenValue)
+		sendCommand(EG_Bad_LedB, blueValue)
 		
-		postUpdate(EG_Bad_LedR, redValue)
-		postUpdate(EG_Bad_LedG, greenValue)
-		postUpdate(EG_Bad_LedB, blueValue)
+end
+
+
+rule "Set Wohnen RGB value"
+	when
+		Item EG_Wohnen_RGB_Color changed
+	then
+		logInfo("RGB.EG_Wohnen_RGB_Color", "EG_Wohnen_RGB_Color changed: "+ EG_Wohnen_RGB_Color)
+		var hsbValue2 = EG_Wohnen_RGB_Color.state as HSBType
+		
+		var Color color2 = Color::getHSBColor(hsbValue2.hue.floatValue / 360, hsbValue2.saturation.floatValue / 100, hsbValue2.brightness.floatValue / 100)
+		
+		var redValue2 = (color2.red.floatValue / 2.55).intValue
+		var greenValue2 = (color2.green.floatValue / 2.55).intValue
+		var blueValue2 = (color2.blue.floatValue / 2.55).intValue
+		logInfo("RGB.EG_Wohnen_RGB_Color", "RED: "+ color2.red.intValue + "% GREEN: "+ color2.green +  "% BLUE: "+ color2.blue + "%")
+		sendCommand(EG_Wohnen_LedR, redValue2)
+		sendCommand(EG_Wohnen_LedG, greenValue2)
+		sendCommand(EG_Wohnen_LedB, blueValue2)
 		
 end

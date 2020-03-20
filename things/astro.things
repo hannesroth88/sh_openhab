@@ -1,0 +1,4 @@
+astro:sun:shutter [ geolocation="48.722359,9.380704,240", interval=600]
+astro:moon:shutter [ geolocation="48.722359,9.380704,245", interval=600]
+
+//48.722359,9.380704,245

@@ -1,0 +1,10 @@
+rule "Test rule every minute"
+when 
+    Time cron "0 0/1 * * * ?"   // every minute
+then
+
+logInfo('rules', 'LastAuf: ' + EG_Rolloautomatik_Zentral_LastAuf.state.toString().substring(0,10))
+
+logInfo('rules', 'Now: ' + now)
+logInfo('rules', 'sunrise: ' + (Astro_Sunrise_Time.state as DateTimeType).zonedDateTime.toInstant.toEpochMilli)
+end

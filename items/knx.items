@@ -20,123 +20,197 @@ Group gEG_Kueche_Hzg     	<radiator> 		(gEG_Kueche)
 Group gEG_Flur       		<corridor>		(gEG) 		
 Group gEG_Flur_Hzg       	<radiator>		(gEG_Flur) 		
 Group gEG_Aussen     		<terrace>		(gAussen) 		
+Group gAstro 				<moon>			(gAstro)
+Group gHeizung      		<radiator>      (gHeizung) 	
+Group gFenster      		<contact>      	(gFenster) 	
+Group gEG_Rolladen      	<blinds>      	(gEG_Rolladen) 
+Group gEG_Rolladen_Konf     <blinds>      	(gEG_Rolladen_Konf) 
+Group gWeather      	    <sun>      	    (gEG_Rolladen) 
+Group gLog     				<text>      		
+
+
+
 
 /*-----------EG Buero-----------*/
-/*Beleuchtung*/									// An/Aus+Ist		hoch/runter		Prozent + Istwert
-Dimmer EG_Buero_LG1_Dim "Büro" (gEG_Buero) [ "Lighting" ]    {knx="1/5/4+1/2/4,   1/6/4, 			1/3/7+1/4/7" }
+/*Beleuchtung*/		
+Dimmer EG_Buero_LG1_Dim "Büro Lampe" (gEG_Buero) [ "Lighting" ] { channel="knx:device:bridge:EG_Technik_Wago:EG_Buero_LG1_Dim" }
+
 /*Heizung*/
-Number EG_Buero_Raumtemperatur_SW 	(gEG_Buero){knx="9.001:3/2/2"}
-Number EG_Buero_Raumtemperatur_MW <temperature> (gEG_Buero_HZG,gTemperaturen) {knx="9.001:3/1/2"}
-Number EG_Buero_Heizung_Regler <heating> (gEG_Buero_HZG) {knx="5.001:3/5/2"}
+Number EG_Buero_Raumtemperatur_SW "Büro Sollwert Temperatur" (gEG_Buero) { channel="knx:device:bridge:EG_Technik_Wago:EG_Buero_Raumtemperatur_SW" }
+Number EG_Buero_Raumtemperatur_MW "Büro Temperatur"  <temperature> (gEG_Buero_HZG,gTemperaturen) { channel="knx:device:bridge:EG_Technik_Wago:EG_Buero_Raumtemperatur_MW" }
+Dimmer EG_Buero_Heizung_Regler "Buero HK [%.1f %%]" <heating> (gEG_Buero_HZG,gHeizung) { channel="knx:device:bridge:EG_Technik_Wago:EG_Buero_Heizung_Regler" }
 /* Steckdosen */
-Switch EG_Buero_Steckd1 {knx="6/1/2"}
+Switch EG_Buero_Steckd1 "Büro Steckdose" [ "Switchable" ] { channel="knx:device:bridge:EG_Technik_Wago:EG_Buero_Steckd1" }
 /* Fenster */
-Contact EG_Buero_Fenst1 "Büro Fenster Terrasse [%s]" <contact> (gEG_Buero,gFenster) {knx="4/1/3"}
-Contact EG_Buero_Fenst2 "Büro Fenster Straße [%s]" <contact> (gEG_Buero,gFenster) {knx="4/1/4"}
-//Contact EG_Buero_Fenst2 "Büro Fenster Straße 	[MAP(windowcontact.map):%s]" <contact> (gEG_Buero,gFenster) {knx="4/1/4"}
-/* Rolladen */																				//		Auf/Ab		Stop 	MW
-Rollershutter	EG_Buero_Rolladen1	"Rolladen Terrasse [%d %%]"			(gEG_Buero)			{ knx="2/1/2,	2/4/2,	2/2/2" }
-Rollershutter	EG_Buero_Rolladen2	"Rolladen Straße [%d %%]"			(gEG_Buero)			{ knx="2/1/3,	2/4/3,	2/2/3" }
+Contact EG_Buero_Fenst1 "Büro Fenster Terrasse [%s]" <contact> (gEG_Buero,gFenster) { channel="knx:device:bridge:EG_Technik_Wago:EG_Buero_Fenst1" }
+Contact EG_Buero_Fenst2 "Büro Fenster Straße [%s]" <contact> (gEG_Buero,gFenster) { channel="knx:device:bridge:EG_Technik_Wago:EG_Buero_Fenst2" }
+
+/* Rolladen */
+Rollershutter	EG_Buero_Rolladen1	"Rolladen Terrasse [%d %%]"			(gEG_Buero,gEG_Rolladen)			{ channel="knx:device:bridge:EG_Technik_Wago:EG_Buero_Rolladen1" }
+Rollershutter	EG_Buero_Rolladen2	"Rolladen Straße [%d %%]"			(gEG_Buero,gEG_Rolladen)			{ channel="knx:device:bridge:EG_Technik_Wago:EG_Buero_Rolladen2" }
 
 /*-----------EG Schlafen-----------*/
-/*Beleuchtung*/									// An/Aus+Ist		hoch/runter		Prozent + Istwert
-Dimmer EG_Schlafen_LG1_Dim  "Schlafzimmer"  (gEG_Schlafen) [ "Lighting" ]    {knx="1/5/17+1/2/17,   1/6/17, 			1/3/20+1/3/17" }
+/*Beleuchtung*/
+Dimmer EG_Schlafen_LG1_Dim  "Schlafzimmer Lampe" (gEG_Schlafen) [ "Lighting" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Schlafen_LG1_Dim" }
 /*Heizung*/
-Number EG_Schlafen_Raumtemperatur_SW 	(gEG_Schlafen){knx="9.001:3/2/5"}
-Number EG_Schlafen_Raumtemperatur_MW <temperature> (gEG_Schlafen_HZG,gTemperaturen) {knx="9.001:3/1/5"}
-Number EG_Schlafen_Heizung_Regler <heating> (gEG_Schlafen_HZG) {knx="5.001:3/5/5"}
+Number EG_Schlafen_Raumtemperatur_SW "Schlafzimmer Sollwert Temperatur"  	(gEG_Schlafen){ channel="knx:device:bridge:EG_Technik_Wago:EG_Schlafen_Raumtemperatur_SW" }
+Number EG_Schlafen_Raumtemperatur_MW "Schlafzimmer Temperatur"  <temperature> (gEG_Schlafen_HZG,gTemperaturen) { channel="knx:device:bridge:EG_Technik_Wago:EG_Schlafen_Raumtemperatur_MW" }
+Dimmer EG_Schlafen_Heizung_Regler "Schlafen HK [%.1f %%]" <heating> (gEG_Schlafen_HZG,gHeizung) { channel="knx:device:bridge:EG_Technik_Wago:EG_Schlafen_Heizung_Regler" }
 /* Steckdosen */
-Switch EG_Schlafen_Steckd1 {knx="6/1/8"}
+Switch EG_Schlafen_Steckd1 "Schlafen Steckdose" [ "Switchable" ]     { channel="knx:device:bridge:EG_Technik_Wago:EG_Schlafen_Steckd1" }
 /* Fenster */
-Contact EG_Schlafen_Tuer1 "Schlafen Tür [%s]" <door> (gEG_Schlafen,gFenster) {knx="4/1/7"}
-/* Rolladen */																				//		Auf/Ab		Stop 	MW
-Rollershutter	EG_Schlafen_Rolladen1	"Rolladen Terrasse [%d %%]"			(gEG_Schlafen)			{ knx="2/1/6,	2/4/6,	2/2/6" }
+Contact EG_Schlafen_Tuer1 "Schlafen Tür [%s]" <door> (gEG_Schlafen,gFenster) { channel="knx:device:bridge:EG_Technik_Wago:EG_Schlafen_Tuer1" }
+/* Rolladen */
+Rollershutter	EG_Schlafen_Rolladen1	"Rolladen Terrasse [%d %%]"			(gEG_Schlafen,gEG_Rolladen)			{ channel="knx:device:bridge:EG_Technik_Wago:EG_Schlafen_Rolladen1" }
 
 
 /*-----------EG Hobby-----------*/
-/*Beleuchtung*/									// An/Aus+Ist		hoch/runter		Prozent + Istwert
-Dimmer EG_Hobby_LG1_Dim "Hobbyzimmer" (gEG_Hobby)  [ "Lighting" ]    {knx="1/5/9+1/2/9,   1/6/9, 			1/3/12+1/4/12" }
+/*Beleuchtung*/
+Dimmer EG_Hobby_LG1_Dim "Hobbyraum Lampe" (gEG_Hobby)  [ "Lighting" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Hobby_LG1_Dim" }
 /*Heizung*/
-Number EG_Hobby_Raumtemperatur_SW 	(gEG_Hobby){knx="9.001:3/2/3"}
-Number EG_Hobby_Raumtemperatur_MW <temperature> (gEG_Hobby_HZG,gTemperaturen) {knx="9.001:3/1/3"}
-Number EG_Hobby_Heizung_Regler <heating> (gEG_Hobby_HZG) {knx="5.001:3/5/3"}
+Number EG_Hobby_Raumtemperatur_SW "Hobbyraum Sollwert Temperatur" (gEG_Hobby){ channel="knx:device:bridge:EG_Technik_Wago:EG_Hobby_Raumtemperatur_SW" }
+Number EG_Hobby_Raumtemperatur_MW "Hobbyraum Temperatur"  <temperature> (gEG_Hobby_HZG,gTemperaturen) { channel="knx:device:bridge:EG_Technik_Wago:EG_Hobby_Raumtemperatur_MW" }
+Dimmer EG_Hobby_Heizung_Regler "Hobby HK [%.1f %%]" <heating> (gEG_Hobby_HZG,gHeizung) { channel="knx:device:bridge:EG_Technik_Wago:EG_Hobby_Heizung_Regler" }
 /* Steckdosen */
-Switch EG_Hobby_Steckd1 {knx="6/1/4"}
+Switch EG_Hobby_Steckd1 "Hobbyraum Steckdose" [ "Switchable" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Hobby_Steckd1" }
 /* Fenster */
-Contact EG_Hobby_Fenst1 "Hobby Fenster [%s]" <contact> (gEG_Hobby,gFenster) {knx="4/1/5"}
-/* Rolladen */																				//		Auf/Ab		Stop 	MW
-Rollershutter	EG_Hobby_Rolladen1	"Rolladen Terrasse [%d %%]"			(gEG_Hobby)			{ knx="2/1/4,	2/4/4,	2/2/4" }
+Contact EG_Hobby_Fenst1 "Hobby Fenster [%s]" <contact> (gEG_Hobby,gFenster) { channel="knx:device:bridge:EG_Technik_Wago:EG_Hobby_Fenst1" }
+/* Rolladen */
+Rollershutter	EG_Hobby_Rolladen1	"Rolladen Terrasse [%d %%]"			(gEG_Hobby,gEG_Rolladen)			{ channel="knx:device:bridge:EG_Technik_Wago:EG_Hobby_Rolladen1" }
 
 /*-----------EG Kueche-----------*/
-/*Beleuchtung*/									// An/Aus+Ist		hoch/runter		Prozent + Istwert
-Dimmer EG_Kueche_LG1_Dim "Küche" (gEG_Kueche) [ "Lighting" ]  {knx="1/5/11+1/2/11,   1/6/11, 			1/3/14+1/4/14" }
+/*Beleuchtung*/
+Dimmer EG_Kueche_LG1_Dim "Küche Lampe" (gEG_Kueche) [ "Lighting" ]  { channel="knx:device:bridge:EG_Technik_Wago:EG_Kueche_LG1_Dim" }
+Dimmer EG_Kueche_LG2_Dim "Küchenzeile" (gEG_Kueche) [ "Lighting" ]  { channel="knx:device:bridge:EG_Technik_Wago:EG_Kueche_LG2_Dim" }
+Dimmer EG_Kueche_LG4_Dim "Bartisch"   (gEG_Kueche) [ "Lighting" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Kueche_LG4_Dim" }
+Switch EG_Kueche_LG5 "Unterschrank links"   (gEG_Kueche) [ "Switchable" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Kueche_LG5" }
+Switch EG_Kueche_LG6 "Unterschrank rechts"   (gEG_Kueche) [ "Switchable" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Kueche_LG6" }
 /*Heizung*/
-Number EG_Kueche_Raumtemperatur_SW 	(gEG_Kueche){knx="9.001:3/2/4"}
-Number EG_Kueche_Raumtemperatur_MW <temperature> (gEG_Kueche_HZG,gTemperaturen) {knx="9.001:3/1/4"}
-Number EG_Kueche_Heizung_Regler <heating> (gEG_Kueche_HZG) {knx="5.001:3/5/4"}
+Number EG_Kueche_Raumtemperatur_SW "Küche Sollwert Temperatur" (gEG_Kueche){ channel="knx:device:bridge:EG_Technik_Wago:EG_Kueche_Raumtemperatur_SW" }
+Number EG_Kueche_Raumtemperatur_MW "Küche Temperatur" <temperature> (gEG_Kueche_HZG,gTemperaturen) { channel="knx:device:bridge:EG_Technik_Wago:EG_Kueche_Raumtemperatur_MW" }
+Dimmer EG_Kueche_Heizung_Regler "Küche HK [%.1f %%]" <heating> (gEG_Kueche_HZG,gHeizung) { channel="knx:device:bridge:EG_Technik_Wago:EG_Kueche_Heizung_Regler" }
 /* Steckdosen */
-Switch EG_Kueche_Steckd1 {knx="6/1/6"}
+Switch EG_Kueche_Steckd1 "Küche Steckdose" [ "Switchable" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Kueche_Steckd1" }
 /* Fenster */
-Contact EG_Kueche_Fenst1 "Kueche Fenster [%s]" <contact> (gEG_Kueche,gFenster) {knx="4/1/6"}
-/* Rolladen */																				//		Auf/Ab		Stop 	MW
-Rollershutter	EG_Kueche_Rolladen1	"Rolladen Terrasse [%d %%]"			(gEG_Kueche)			{ knx="2/1/5,	2/4/5,	2/2/5" }
+Contact EG_Kueche_Fenst1 "Kueche Fenster [%s]" <contact> (gEG_Kueche,gFenster) { channel="knx:device:bridge:EG_Technik_Wago:EG_Kueche_Fenst1" }
+/* Rolladen */
+Rollershutter	EG_Kueche_Rolladen1	"Rolladen Terrasse [%d %%]"			(gEG_Kueche,gEG_Rolladen)			{ channel="knx:device:bridge:EG_Technik_Wago:EG_Kueche_Rolladen1" }
+/* Sonstiges */
+Switch EG_Kueche_Schornsteinfeger "Küche Schornsteinfeger"    { channel="knx:device:bridge:EG_Technik_Wago:EG_Kueche_Schornsteinfeger" }
 
 
 /*-----------EG Wohnen-----------*/
-/*Beleuchtung*/									// An/Aus+Ist		hoch/runter		Prozent + Istwert
-Dimmer EG_Wohnen_LG1_Dim "Wohnzimmer Tisch" (gEG_Wohnen)   [ "Lighting" ]    {knx="1/5/19+1/2/19,   1/6/19, 			1/3/22+1/4/22" }
-Dimmer EG_Wohnen_LG2_Dim "Wohnzimmer Mitte"  (gEG_Wohnen)   [ "Lighting" ]    {knx="1/5/20+1/2/20,   1/6/20, 			1/3/23+1/4/23" }
-Dimmer EG_Wohnen_LG3_Dim "Wohnzimmer Sofa"  (gEG_Wohnen)   [ "Lighting" ]    {knx="1/5/21+1/2/21,   1/6/21, 			1/3/24+1/4/24" }
+/*Beleuchtung*/
+Dimmer EG_Wohnen_LG1_Dim "Wohnzimmer Tisch" (gEG_Wohnen)   [ "Lighting" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_LG1_Dim" }
+Dimmer EG_Wohnen_LG2_Dim "Wohnzimmer Mitte"  (gEG_Wohnen)   [ "Lighting" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_LG2_Dim" }
+Dimmer EG_Wohnen_LG3_Dim "Wohnzimmer Sofa"  (gEG_Wohnen)   [ "Lighting" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_LG3_Dim" }
+Switch EG_Wohnen_Esstischlampe "Wohnzimmer Esstischlampe"   (gEG_Wohnen) [ "Switchable" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_Esstischlampe" }
+
+Switch EG_Wohnen_RGB_An "RGB Streifen" <socket>  { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_RGB_An" }
+Dimmer EG_Wohnen_LedR     "LED Red"               <dimmer>       { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_LedR" }
+Dimmer EG_Wohnen_LedG     "LED Green"             <dimmer>       { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_LedG" }
+Dimmer EG_Wohnen_LedB     "LED Blue"              <dimmer>       { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_LedB" }
+Dimmer EG_Wohnen_LedW     "LED White"             <dimmer>       { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_LedW" }
+Color  EG_Wohnen_RGB_Color  "RGB Streifen"     <slider>     (gEG_Wohnen)
+Switch EG_Wohnen_RGB_Szene "Wohnzimmer Farbwechsel" [ "Switchable" ] { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_RGB_Szene" }
 /*Heizung*/
-Number EG_Wohnen_Raumtemperatur_SW 	(gEG_Wohnen){knx="9.001:3/2/6"}
-Number EG_Wohnen_Raumtemperatur_MW <temperature> (gEG_Wohnen_HZG,gTemperaturen) {knx="9.001:3/1/6"}
-Number EG_Wohnen_Heizung_Regler <heating> (gEG_Wohnen_HZG) {knx="5.001:3/5/6"}
+Number EG_Wohnen_Raumtemperatur_SW "Wohnzimmer Sollwert Temperatur" (gEG_Wohnen){ channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_Raumtemperatur_SW" }
+Number EG_Wohnen_Raumtemperatur_MW "Wohnzimmer Temperatur" <temperature> (gEG_Wohnen_HZG,gTemperaturen) { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_Raumtemperatur_MW" }
+Dimmer EG_Wohnen_Heizung_Regler  "Wohnen HK [%.1f %%]" <heating> (gEG_Wohnen_HZG,gHeizung) { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_Heizung_Regler" }
 /* Steckdosen */
-Switch EG_Wohnen_Steckd1 {knx="6/1/10"}
-Switch EG_Wohnen_Steckd2 {knx="6/1/11"}
+Switch EG_Wohnen_Steckd1 "Wohnzimmer Steckdose" [ "Switchable" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_Steckd1" }
+Switch EG_Wohnen_Steckd2 "Wohnzimmer Eck Steckdose" [ "Switchable" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_Steckd2" }
 /* Fenster */
-Contact EG_Wohnen_Fenst1 "Wohnen Fenster 1 [%s]" <contact> (gEG_Wohnen,gFenster) {knx="4/1/8"}
-Contact EG_Wohnen_Fenst2 "Wohnen Fenster 2 [%s]" <contact> (gEG_Wohnen,gFenster) {knx="4/1/9"}
-Contact EG_Wohnen_Tuer1 "Wohnen Tür [%s]" <contact> (gEG_Wohnen,gFenster) {knx="4/1/10"}
-/* Rolladen */																				//		Auf/Ab		Stop 	MW
-Rollershutter	EG_Wohnen_Rolladen1	"Rolladen Fenster [%d %%]"			(gEG_Wohnen)			{ knx="2/1/7,	2/4/7,	2/2/7" }
-Rollershutter	EG_Wohnen_Rolladen2	"Rolladen Tür [%d %%]"				(gEG_Wohnen)			{ knx="2/1/8,	2/4/8,	2/2/8" }
+Contact EG_Wohnen_Fenst1 "Wohnen Fenster 1 [%s]" <contact> (gEG_Wohnen,gFenster) { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_Fenst1" }
+Contact EG_Wohnen_Fenst2 "Wohnen Fenster 2 [%s]" <contact> (gEG_Wohnen,gFenster) { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_Fenst2" }
+Contact EG_Wohnen_Tuer1 "Wohnen Tür [%s]" <contact> (gEG_Wohnen,gFenster) { channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_Tuer1" }
+/* Rolladen */
+Rollershutter	EG_Wohnen_Rolladen1	"Rolladen Fenster [%d %%]"			(gEG_Wohnen,gEG_Rolladen)			{ channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_Rolladen1" }
+Rollershutter	EG_Wohnen_Rolladen2	"Rolladen Tür [%d %%]"				(gEG_Wohnen,gEG_Rolladen)			{ channel="knx:device:bridge:EG_Technik_Wago:EG_Wohnen_Rolladen2" }
 
 
 /*-----------EG Bad-----------*/
-/*Beleuchtung*/									// An/Aus+Ist		hoch/runter		Prozent + Istwert
-Dimmer EG_Bad_LG1_Dim "Bad" (gEG_Bad)   [ "Lighting" ]    {knx="1/5/1+1/2/1,   1/6/1, 			1/3/1+1/4/1" }
-
-Switch EG_Bad_RGB_An "RGB Spot" <socket>  {knx="1/5/3+<1/2/3"}
-Dimmer EG_Bad_LedR     "LED Red"               <dimmer>       { knx = "1/5/3+<1/2/3, 1/6/3 , 1/3/3+<1/4/3" }
-Dimmer EG_Bad_LedG     "LED Green"             <dimmer>       { knx = "1/5/3+<1/2/3, 1/6/3 , 1/3/4+<4/4/4" }
-Dimmer EG_Bad_LedB     "LED Blue"              <dimmer>       { knx = "1/5/3+<1/2/3, 1/6/3 , 1/3/5+<4/4/5" }
-Color  EG_Bad_RGB_Color  "RGB Spot"     <slider>     (gEG_Bad)
+/*Beleuchtung*/
+Dimmer EG_Bad_LG1_Dim "Bad Lampe" (gEG_Bad)   [ "Lighting" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_LG1_Dim" }
+Switch EG_Bad_RGB_An "RGB Streifen" <socket>  { channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_RGB_An" }
+Dimmer EG_Bad_LedR     "LED Red"               <dimmer>       { channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_LedR" }
+Dimmer EG_Bad_LedG     "LED Green"             <dimmer>       { channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_LedG" }
+Dimmer EG_Bad_LedB     "LED Blue"              <dimmer>       { channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_LedB" }
+Color  EG_Bad_RGB_Color  "RGB Streifen"     <slider>     (gEG_Bad)
+Switch EG_Bad_RGB_Szene "Bad Farbwechsel" [ "Switchable" ] { channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_RGB_Szene" }
 /*Heizung*/
-Number EG_Bad_Raumtemperatur_SW 	(gEG_Bad){knx="9.001:3/2/1"}
-Number EG_Bad_Raumtemperatur_MW <temperature> (gEG_Bad_HZG,gTemperaturen) {knx="9.001:3/1/1"}
-Number EG_Bad_Heizung_Regler1 <heating> (gEG_Bad_HZG) {knx="5.001:3/5/0"}
-Number EG_Bad_Heizung_Regler2 <heating> (gEG_Bad_HZG) {knx="5.001:3/5/1"}
+Number EG_Bad_Raumtemperatur_SW "Bad Sollwert Temperatur" (gEG_Bad){ channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_Raumtemperatur_SW" }
+Number EG_Bad_Raumtemperatur_MW "Bad Temperatur" <temperature> (gEG_Bad_HZG,gTemperaturen) { channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_Raumtemperatur_MW" }
+Dimmer EG_Bad_Heizung_Regler1  "Bad HK 1 [%.1f %%]" <heating> (gEG_Bad_HZG,gHeizung) { channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_Heizung_Regler1" }
+Dimmer EG_Bad_Heizung_Regler2  "Bad HK 2 [%.1f %%]" <heating> (gEG_Bad_HZG,gHeizung) { channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_Heizung_Regler2" }
 /* Steckdosen */
-Switch EG_Bad_Steckd1 {knx="6/1/0"}
+Switch EG_Bad_Steckd1 "Spiegelschrank" [ "Switchable" ] { channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_Steckd1" }
 /* Fenster */
-Contact EG_Bad_Fenst1 "Bad Fenster 1[%s]" <contact> (gEG_Bad,gFenster) {knx="4/1/1"}
-Contact EG_Bad_Fenst2 "Bad Fenster 2[%s]" <contact> (gEG_Bad,gFenster) {knx="4/1/2"}
-/* Rolladen */																				//		Auf/Ab		Stop 	MW
-Rollershutter	EG_Bad_Rolladen1	"Rolladen [%d %%]"			(gEG_Bad)			{ knx="2/1/1,	2/4/1,	2/2/1" }
+Contact EG_Bad_Fenst1 "Bad Fenster 1[%s]" <contact> (gEG_Bad,gFenster) { channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_Fenst1" }
+Contact EG_Bad_Fenst2 "Bad Fenster 2[%s]" <contact> (gEG_Bad,gFenster) { channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_Fenst2" }
+/* Rolladen */
+Rollershutter	EG_Bad_Rolladen1	"Rolladen [%d %%]"			(gEG_Bad,gEG_Rolladen)		{ channel="knx:device:bridge:EG_Technik_Wago:EG_Bad_Rolladen1" }
 
 
 /*-----------EG Flur-----------*/
-/*Beleuchtung*/									// An/Aus+Ist		hoch/runter		Prozent + Istwert
-Dimmer EG_Flur_LG1_Dim "Flur"  (gEG_Flur)  [ "Lighting" ]    {knx="1/5/6+1/2/6,   1/6/6, 			1/3/9+1/3/6" }
-Dimmer EG_Flur_LG2_Dim "Träger"  (gEG_Flur)  [ "Lighting" ]    {knx="1/5/7+1/2/7,   1/6/7, 			1/3/10+1/3/6" }
+/*Beleuchtung*/
+Dimmer EG_Flur_LG1_Dim "Flur"  (gEG_Flur)  [ "Lighting" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Flur_LG1_Dim" }
+Dimmer EG_Flur_LG2_Dim "Träger"  (gEG_Flur)  [ "Lighting" ]    { channel="knx:device:bridge:EG_Technik_Wago:EG_Flur_LG2_Dim" }
+Switch EG_Flur_Tablet_Battery { channel="knx:device:bridge:EG_Technik_Wago:EG_Flur_Tablet_Battery" }
+Contact EG_Flur_Praesenz "Präsenzmelder Flur" { channel="knx:device:bridge:EG_Technik_Wago:EG_Flur_Praesenz" }
 
 
 /*-----------Allgemein-----------*/
-Switch EG_Zentral_Beleuchtung "Alle Lampen"  (gAllgemein)  [ "Lighting" ] {knx="1/0/1"}
-Rollershutter	EG_Zentral_Rolladen	"Rolladen Zentral [%d %%]"			(gAllgemein)			{ knx="2/0/0,	2/0/1,2/2/4"  }
+Switch EG_Zentral_Beleuchtung "Alle Lampen"  (gAllgemein)  [ "Lighting" ] { channel="knx:device:bridge:EG_Technik_Wago:EG_Zentral_Beleuchtung" , autoupdate="false"}
+Rollershutter	EG_Zentral_Rolladen	"Rolladen Zentral [%d %%]"			(gAllgemein)			{ channel="knx:device:bridge:EG_Technik_Wago:EG_Zentral_Rolladen" }
+Rollershutter EG_Fassade_Lager "Fassade Lager"  (gAllgemein) { channel="knx:device:bridge:EG_Technik_Wago:EG_Fassade_Lager" }
+Rollershutter EG_Fassade_Terrasse "Fassade Terrasse"  (gAllgemein) { channel="knx:device:bridge:EG_Technik_Wago:EG_Fassade_Terrasse" }
+Rollershutter EG_Fassade_Strasse "Fassade Straße"  (gAllgemein) { channel="knx:device:bridge:EG_Technik_Wago:EG_Fassade_Strasse" }
+
+DateTime ntpDateTime  "Date  [%1$td.%1$tm.%1$tY %1$tH:%1$tM]" {channel="ntp:ntp:local:dateTime",channel="knx:device:bridge:EG_Technik_Wago:ntpZeit",channel="knx:device:bridge:EG_Technik_Wago:ntpDatum"}
+
+//no more sending to Wago
+//DateTime Astro_Sunrise_Time "Morgendämmerung [%1$tH:%1$tM h]"  <sunrise> (gAstro) {channel="knx:device:bridge:EG_Technik_Wago:Astro_Sunrise_Time",channel="astro:sun:shutter:civilDawn#start"}
+//DateTime Astro_Sunset_Time "Abenddämmerung [%1$tH:%1$tM h]" <moon> (gAstro) {channel="knx:device:bridge:EG_Technik_Wago:Astro_Sunset_Time", channel="astro:sun:shutter:civilDusk#end"}
+DateTime Astro_Sunrise_Time "Morgendämmerung"  <sunrise> (gAstro) {channel="astro:sun:shutter:civilDawn#start"}
+DateTime Astro_Sunset_Time "Abenddämmerung" <moon> (gAstro) {channel="astro:sun:shutter:civilDusk#end"}
+Number  Azimuth "Sonnenrichtung Azimuth [%.1f°]"           (gAstro)            { channel="astro:sun:shutter:position#azimuth" }
+Number  Elevation       "Sonnenhöhe [%.1f°]"     (gAstro)            { channel="astro:sun:shutter:position#elevation" }
+
+/*-----------Wetter-----------*/
+Number   Temperature   "Temperature [%.2f °C]" (gWeather) {weather="locationId=home, type=temperature, property=current"}
+Number   Humidity      "Humidity [%d %%]" (gWeather)        {weather="locationId=home, type=atmosphere, property=humidity"}
+Number   Temp_Max         "Temperature max [%.2f °C]" (gWeather)   {weather="locationId=home, forecast=0, type=temperature, property=max"}
+Number   Temp_Min         "Temperature min [%.2f °C]" (gWeather)   {weather="locationId=home, forecast=0, type=temperature, property=min"}
 
 
+
+/*-----------Konfiguration Rolladen Hitzeschutz-----------*/
+Switch EG_Rolloautomatik "Rollo-Automatik (Aus=Zeitschaltuhr)" (gEG_Rolladen_Konf) { channel="knx:device:bridge:EG_Technik_Wago:EG_Rolloautomatik" }
+Switch EG_Hitzeschutz "Hitzeschutz An/Aus" (gEG_Rolladen_Konf) { channel="knx:device:bridge:EG_Technik_Wago:EG_Hitzeschutz" }
+Number EG_Hitzeschutz_SW_MaxTemp "SW Hitzeschutz Grenze [%d °C]" (gEG_Rolladen_Konf)
+//Ab
+Number EG_SW_Azimuth_Fassade_LagerAb "SW Sonnenrichtung Lager Ab (80) [%d °]" (gEG_Rolladen_Konf)
+Number EG_SW_Azimuth_Fassade_TerrasseAb "SW Sonnenrichtung Terrasse Ab (120) [%d °]" (gEG_Rolladen_Konf)
+Number EG_SW_Azimuth_Fassade_StrasseAb "SW Sonnenrichtung Strasse Ab (220) [%d °]" (gEG_Rolladen_Konf)
+DateTime EG_Rolloautomatik_Lager_LastAb "Rolladen Ab Lager" (gEG_Rolladen_Konf)
+DateTime EG_Rolloautomatik_Terrasse_LastAb "Rolladen Ab Terrasse" (gEG_Rolladen_Konf)
+DateTime EG_Rolloautomatik_Strasse_LastAb "Rolladen Ab Strasse" (gEG_Rolladen_Konf)
+//Auf
+Number EG_SW_Azimuth_Fassade_LagerAuf "SW Sonnenrichtung Lager Auf (220) [%d °]" (gEG_Rolladen_Konf)
+DateTime EG_Rolloautomatik_Lager_LastAuf "Rolladen Auf Lager" (gEG_Rolladen_Konf)
+DateTime EG_Rolloautomatik_Terrasse_LastAuf "Rolladen Auf Terrasse" (gEG_Rolladen_Konf)
+DateTime EG_Rolloautomatik_Strasse_LastAuf "Rolladen Auf Strasse" (gEG_Rolladen_Konf)
+//Zentral
+DateTime EG_Rolloautomatik_Zentral_LastAb "Rolladen Zentral Ab" (gEG_Rolladen_Konf)
+DateTime EG_Rolloautomatik_Zentral_LastAuf "Rolladen Zentral Auf" (gEG_Rolladen_Konf)
+
+
+
+/*-----------Hyperion-----------*/
+//Dimmer EG_Wohnen_RGB_Brightness "Brightness [%s]" {channel="hyperion:serverV1:7cd2b269:brightness"}
+//Color EG_Wohnen_RGB_Color "Color" {channel="hyperion:serverV1:7cd2b269:color"}
+//String EG_Wohnen_RGB_Effect "Current effect [%s]" {channel="hyperion:serverV1:7cd2b269:effect"}
 
 // Schalter für den openHab Restart
 //Switch openHabRestart "Openhab Restart" (System) {exec=">[ON:sudo systemctl restart openhab2.service]" ,autoupdate="true"}
